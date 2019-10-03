@@ -65,3 +65,7 @@ MemoryCaptures
 
 !*.gitkeep
 # Imported
+Assets/ML-Agents/*
+Assets/Gizmos/*
+Assets/PolygonTown/*
+Assets/Scenes/ML_Training/*
