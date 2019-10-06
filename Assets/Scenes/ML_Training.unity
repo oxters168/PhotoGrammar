@@ -158,8 +158,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   broadcastHub:
-    broadcastingBrains: []
-    m_BrainsToControl: []
+    broadcastingBrains:
+    - {fileID: 11400000, guid: b7737b90e75b85949928da6dc8212689, type: 2}
+    m_BrainsToControl:
+    - {fileID: 11400000, guid: b7737b90e75b85949928da6dc8212689, type: 2}
   m_TrainingConfiguration:
     width: 80
     height: 80
@@ -173,7 +175,13 @@ MonoBehaviour:
     timeScale: 1
     targetFrameRate: 60
   resetParameters:
-    m_ResetParameters: []
+    m_ResetParameters:
+    - key: x
+      value: 3.74
+    - key: y
+      value: 1.73
+    - key: z
+      value: -15
 --- !u!1 &285890584
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,7 +191,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 285890586}
+  - component: {fileID: 285890587}
   - component: {fileID: 285890585}
+  - component: {fileID: 285890589}
+  - component: {fileID: 285890588}
   m_Layer: 0
   m_Name: Photographer
   m_TagString: Untagged
@@ -203,9 +214,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb92992fcbf2e9e4b81cccddd39551a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  photographersCamera: {fileID: 1190709486}
   screenCapture: {fileID: 0}
-  secondsPerCapture: 2
+  isCapturing: 0
 --- !u!4 &285890586
 Transform:
   m_ObjectHideFlags: 0
@@ -214,13 +224,74 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 285890584}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.737, y: 1.311, z: -15.009}
+  m_LocalPosition: {x: 3.74, y: 1.73, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1190709487}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &285890587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285890584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 320659711b7f92849aaae3e74dc96bd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  brain: {fileID: 11400000, guid: b7737b90e75b85949928da6dc8212689, type: 2}
+  agentParameters:
+    agentCameras:
+    - {fileID: 1190709486}
+    agentRenderTextures: []
+    maxStep: 0
+    resetOnDone: 1
+    onDemandDecision: 0
+    numberOfActionsBetweenDecisions: 1
+  rootBoundsObject: {fileID: 857670037}
+  maxBadPoints: 5
+  maxRepeatedPoints: 5
+  goodPoints: []
+  badPoints: []
+  repeatedPoints: []
+--- !u!114 &285890588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285890584}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a943758818b73a4fad47880d3b03420, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  photographer: {fileID: 285890585}
+  minAngle: 10
+  maxAngle: 45
+  totalAngle: 360
+  secondsPerCapture: 2
+  maxImageCapacity: 20
+--- !u!114 &285890589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285890584}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeaf0997a971cf04786cc143244ba9cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minSpeed: -5
+  maxSpeed: 5
+  minXAngle: -60
+  maxXAngle: 60
 --- !u!1 &471306776
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,6 +322,12 @@ Transform:
   m_Father: {fileID: 202768235}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &857670037 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3179038892433422976, guid: 42a2c5756d514f84e9fa8b62a1d76518,
+    type: 3}
+  m_PrefabInstance: {fileID: 4393740578448640286}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1190709485
 GameObject:
   m_ObjectHideFlags: 0
@@ -410,7 +487,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &1552955414
 AudioListener:
   m_ObjectHideFlags: 0
