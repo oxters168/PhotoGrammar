@@ -1,6 +1,7 @@
 ﻿using MLAgents;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityHelpers;
 
 public class PhotogramAgent : Agent
 {
@@ -48,7 +49,7 @@ public class PhotogramAgent : Agent
             //if (vectorAction[4] >= 1)
             //{
                 Vector3 point = new Vector3(ToOneDecimal(vectorAction[4]), ToOneDecimal(vectorAction[5]), ToOneDecimal(vectorAction[6]));
-                var possibleGameObjects = CheckInGameObjectBounds(point);
+                var possibleGameObjects = rootBoundsObject.transform.HasPointInTotalBounds(point);
                 if (IsPointOnSurfaceOf(point, possibleGameObjects) != null)
                 {
                     if (!goodPoints.Contains(point))
@@ -87,6 +88,19 @@ public class PhotogramAgent : Agent
         transform.rotation = Quaternion.identity;
     }
 
+    private Transform IsPointOnSurfaceOf(Vector3 point, List<Transform> candidates)
+    {
+        Transform theOneTrueObject = null;
+        foreach (Transform anObject in candidates)
+        {
+            if (anObject.IsPointOnSurfaceOf(point))
+            {
+                theOneTrueObject = anObject;
+                break;
+            }
+        }
+        return theOneTrueObject;
+    }
     private float ToOneDecimal(float value)
     {
         return ((int)(value * 10)) / 10f;
@@ -94,59 +108,5 @@ public class PhotogramAgent : Agent
     private float ToTwoDecimals(float value)
     {
         return ((int)(value * 100)) / 100f;
-    }
-    private GameObject IsPointOnSurfaceOf(Vector3 point, List<GameObject> gameObjects)
-    {
-        foreach(GameObject currentObject in gameObjects)
-        {
-            MeshFilter meshFilter = currentObject.GetComponent<MeshFilter>();
-            if (meshFilter != null)
-            {
-                Mesh mesh = meshFilter.sharedMesh;
-                for (int i = 0; i < mesh.triangles.Length; i += 3)
-                {
-                    Vector3 triangleA = mesh.vertices[mesh.triangles[i + 0]];
-                    Vector3 triangleB = mesh.vertices[mesh.triangles[i + 1]];
-                    Vector3 triangleC = mesh.vertices[mesh.triangles[i + 2]];
-
-                    if (PointInTriangle(triangleA, triangleB, triangleC, point))
-                    {
-                        return currentObject;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-    private List<GameObject> CheckInGameObjectBounds(Vector3 point)
-    {
-        List<GameObject> pointPierces = new List<GameObject>();
-        
-        foreach(Transform t in rootBoundsObject.GetComponentsInChildren<Transform>())
-        {
-            if (UnityHelpers.BoundsHelpers.Bounds(t).Contains(point))
-                pointPierces.Add(t.gameObject);
-        }
-        return pointPierces;
-    }
-
-    private bool PointInTriangle(Vector3 triangleA, Vector3 triangleB, Vector3 triangleC, Vector3 point)
-    {
-        if (SameSide(point, triangleA, triangleB, triangleC) && SameSide(point, triangleB, triangleA, triangleC) && SameSide(point, triangleC, triangleA, triangleB))
-        {
-            Vector3 vc1 = Vector3.Cross(triangleA - triangleB, triangleA - triangleC);
-            if (Mathf.Abs(Vector3.Dot((triangleA - point).normalized, vc1.normalized)) <= .01f)
-                return true;
-        }
-
-        return false;
-    }
-    private bool SameSide(Vector3 p1, Vector3 p2, Vector3 A, Vector3 B)
-    {
-        Vector3 cp1 = Vector3.Cross(B - A, p1 - A);
-        Vector3 cp2 = Vector3.Cross(B - A, p2 - A);
-        if (Vector3.Dot(cp1, cp2) >= 0) return true;
-        return false;
-
     }
 }
